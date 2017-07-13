@@ -1,0 +1,44 @@
+//Connect Sleep pin to 3.3V of arduino. Senor won't respond until sleep is connected.
+//Connect sensor with 5V and GND
+//Connect X,Y and Z to defined pins below.
+//Arduino has Analog read that show values between 0-5V as 0-1023 in integer.
+//Per integer unit equals 0.0049V or 4.9mV.
+//So we multiply the input with this value to obtain voltage from Analog pin.
+// the setup routine runs once when you press reset:
+//in ±1.5g mode: Accelerometer provide 800mV per 1g reading.
+//a bump creates minimum ±0.25g movement on Z axis
+//Bumps are ±200mV or ±0.2V deflections in Accelerometer 
+float threshold=2.24;
+
+void setup() {
+  // initialize serial communication at 9600 bits per second:
+  Serial.begin(9600);
+  //float threshold=caliberated_value();
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+  // read the input on analog pin 0:
+  float Z = analogRead(A0)*0.0049;//Z-axis
+  if(Z<threshold-0.2||Z>threshold+0.2)
+  {Serial.println("Bump!");
+  delay(500);        // delay in between reads for stability
+}
+}
+/*
+float caliberated_value(){
+  Serial.print("\nCaliberating...");
+  Serial.print("\nTime Remaining(sec):\n");
+  float cal=0;
+  for(int i=10;i>0;i--)
+  {
+    cal+=analogRead(A0)*0.0049;
+    if(i%2==0){Serial.println(i/2);}
+    delay(500);
+  }
+  Serial.println("Average Value is");
+  Serial.print(cal/10);
+  return cal/10;
+}
+//Calculate average
+*/
